@@ -9,28 +9,40 @@ import { ChallengeBox } from "../components/ChallengeBox";
 
 import styles from "../styles/pages/Home.module.css";
 import { CountdownProvider } from "../contexts/CountdownContext";
+import { ChallengesProvider } from "../contexts/ChallengesContext";
 
-export default function Home() {
+interface HomeProps {
+  level: number;
+  currentExperience: number;
+  challengeCompleted: number;
+}
+export default function Home(props) {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Início | move.it</title>
-      </Head>
-      <ExperienceBar />
+    <ChallengesProvider
+      level={props.level}
+      currentExperience={props.currentExperience}
+      challengesCompleted={props.challengesCompleted}
+    >
+      <div className={styles.container}>
+        <Head>
+          <title>Início | move.it</title>
+        </Head>
+        <ExperienceBar />
 
-      <CountdownProvider>
-        <section>
-          <div>
-            <Profile />
-            <CompletedChallenges />
-            <Countdown />
-          </div>
-          <div>
-            <ChallengeBox />
-          </div>
-        </section>
-      </CountdownProvider>
-    </div>
+        <CountdownProvider>
+          <section>
+            <div>
+              <Profile />
+              <CompletedChallenges />
+              <Countdown />
+            </div>
+            <div>
+              <ChallengeBox />
+            </div>
+          </section>
+        </CountdownProvider>
+      </div>
+    </ChallengesProvider>
   );
 }
 
@@ -39,9 +51,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      level,
-      currentExperience,
-      challengesCompleted,
+      level: Number(level),
+      currentExperience: Number(currentExperience),
+      challengesCompleted: Number(challengesCompleted),
     },
   };
 };
